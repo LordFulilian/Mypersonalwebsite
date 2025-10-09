@@ -26,6 +26,12 @@
     <li>
       <span class="nav-item" data-prefix="/boke/images/feibi" data-count="2" style="cursor:pointer; color:#6A5ACD;">菲比</span>
     </li>
+     <li>
+      <span class="nav-item" data-prefix="/boke/images/kuaishan" data-count="14" style="cursor:pointer; color:#6A5ACD;">芙莉莲快闪店</span>
+    </li>
+     <li>
+      <span class="nav-item" data-prefix="/boke/images/tianshi" data-count="15" style="cursor:pointer; color:#6A5ACD;">天使降临在我身边</span>
+    </li>
   </ul>
 </details>
 

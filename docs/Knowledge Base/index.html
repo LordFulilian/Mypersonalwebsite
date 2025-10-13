@@ -3,7 +3,7 @@
 <html lang="English">
 <head>
     <meta charset="utf-8" />
-    <title>学习笔记 | start.luck</title>
+    <title> | start.luck</title>
     <meta name="author" content="zhangqi" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -144,103 +144,92 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>学习笔记</h1>
+        <h1></h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/10/1
+            2025/10/13
         </span>
         
         
     </div>
     
     <div class="content" v-pre>
-        <h1 id="学习笔记"><a href="#学习笔记" class="headerlink" title="学习笔记"></a>学习笔记</h1><h2 id="Vue-知识点"><a href="#Vue-知识点" class="headerlink" title="Vue 知识点"></a>Vue 知识点</h2><details>
-<summary>Vue 响应式原理</summary>
+        <p>javascript基础</p>
+<details>
+<summary>在 JavaScript 中创建对象有多种方法，下面将详细介绍几种常用方式：</summary>
+
+<details>
+<summary>1. 对象字面量语法</summary>
+
+<p>一组用逗号分隔的名称-值对，用大括号括起来：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> object = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;Sudheer&quot;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">34</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>对象字面量属性值可以是任何数据类型，包括数组、函数、嵌套对象。</p>
+<blockquote>
+<p>注意：这是创建对象最简单的方法之一，常用于创建简单的临时对象。</p>
+</blockquote>
+</details>
+
+<details>
+<summary>2. 使用 new Object() 构造函数</summary>
+
+<p>通过 <code>new Object()</code> 创建一个空对象，然后动态添加属性：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> object = <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line">object.<span class="property">name</span> = <span class="string">&quot;Sudheer&quot;</span>;</span><br><span class="line">object.<span class="property">age</span> = <span class="number">34</span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>Vue 通过 <code>Object.defineProperty</code> &#x2F; <code>Proxy</code> 实现响应式</li>
-<li>数据变化会自动更新视图</li>
-<li>响应式包括<strong>getter</strong> 和 <strong>setter</strong> 拦截，对依赖进行收集和触发更新</li>
-<li>Vue 3 使用 Proxy，更加高效并能监听数组和对象新增属性</li>
+<li>优点：直观、灵活  </li>
+<li>缺点：代码较繁琐，不如字面量简洁</li>
 </ul>
 </details>
 
 <details>
-<summary>Vue 组件通信</summary>
+<summary>3. 使用构造函数</summary>
+
+<p>定义一个函数作为对象模板，然后用 <code>new</code> 实例化：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Person</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">age</span> = age;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Sudheer&quot;</span>, <span class="number">34</span>);</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>父子组件：props 传值，$emit 触发事件</li>
-<li>兄弟组件：EventBus（事件总线） &#x2F; Pinia &#x2F; Vuex 状态管理</li>
-<li>跨级通信：provide &#x2F; inject 或全局状态管理</li>
+<li>优点：可复用，适合批量创建类似对象  </li>
+<li>缺点：方法会被每个实例复制一份，占内存</li>
 </ul>
 </details>
 
 <details>
-<summary>Vue 生命周期顺序</summary>
+<summary>4. 使用 Object.create()</summary>
+
+<p>从指定原型对象创建一个新对象：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> proto = &#123; </span><br><span class="line">  <span class="title function_">greet</span>(<span class="params"></span>) &#123; <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hi&quot;</span>); &#125; </span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> object = <span class="title class_">Object</span>.<span class="title function_">create</span>(proto);</span><br><span class="line">object.<span class="property">name</span> = <span class="string">&quot;Sudheer&quot;</span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><strong>beforeCreate</strong>：实例初始化，数据和事件未绑定</li>
-<li><strong>created</strong>：数据观测和事件已绑定，DOM 未生成</li>
-<li><strong>beforeMount</strong>：模板编译完成，DOM 未挂载</li>
-<li><strong>mounted</strong>：DOM 已挂载，可操作真实 DOM</li>
-<li><strong>beforeUpdate</strong>：数据变化，DOM 更新前触发</li>
-<li><strong>updated</strong>：数据变化，DOM 已更新</li>
-<li><strong>beforeUnmount</strong>：组件销毁前触发</li>
-<li><strong>unmounted</strong>：组件已销毁</li>
-</ul>
-</details>
-
-<h2 id="Spring-知识点"><a href="#Spring-知识点" class="headerlink" title="Spring 知识点"></a>Spring 知识点</h2><details>
-<summary>Spring Bean 生命周期</summary>
-
-<ul>
-<li><strong>实例化</strong>：Spring 创建 Bean 对象</li>
-<li><strong>属性注入</strong>：注入依赖的属性或 Bean</li>
-<li><strong>初始化回调</strong>：调用 <code>@PostConstruct</code> 或 <code>InitializingBean.afterPropertiesSet</code></li>
-<li><strong>使用</strong>：Bean 可正常被应用调用</li>
-<li><strong>销毁回调</strong>：调用 <code>@PreDestroy</code> 或 <code>DisposableBean.destroy</code></li>
+<li>优点：可直接指定原型，更灵活的继承控制</li>
 </ul>
 </details>
 
 <details>
-<summary>Spring 单例 Bean 与原型 Bean 区别</summary>
+<summary>5. 使用类（class）语法</summary>
+
+<p>使用 ES6 的 <code>class</code> 创建对象：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">age</span> = age;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Sudheer&quot;</span>, <span class="number">34</span>);</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><strong>单例 Bean</strong>：整个 Spring 容器中只有一个实例，每次获取都是同一个对象</li>
-<li><strong>原型 Bean</strong>：每次获取都会创建新的实例</li>
-<li>生命周期：单例 Bean 容器启动时创建，原型 Bean 容器不管理销毁</li>
+<li>优点：语法清晰，结构化强  </li>
+<li>缺点：语法糖，本质仍基于原型继承</li>
 </ul>
 </details>
 
-<h2 id="Java-知识点"><a href="#Java-知识点" class="headerlink" title="Java 知识点"></a>Java 知识点</h2><details>
-<summary>Java 内存模型</summary>
-
-<ul>
-<li><strong>堆（Heap）</strong>：存储对象实例，垃圾回收器管理</li>
-<li><strong>栈（Stack）</strong>：存储方法调用，局部变量和操作数</li>
-<li><strong>方法区（Method Area &#x2F; 元空间 Metaspace）</strong>：存储类信息、常量、静态变量</li>
-<li><strong>程序计数器（PC）</strong>：记录当前线程执行到哪条字节码</li>
-<li><strong>直接内存（Direct Memory）</strong>：非 JVM 堆内存，用于高性能 I&#x2F;O</li>
-<li><strong>线程共享</strong>：堆和方法区被所有线程共享，栈和 PC 寄存器是线程独有</li>
-</ul>
 </details>
 
+
+<p>数据库基础</p>
 <details>
-<summary>Java volatile 关键字作用</summary>
+<summary>sql支持以下三种注释</summary>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">from</span> mytable;<span class="comment">--注释</span></span><br><span class="line"><span class="comment">/*注释1</span></span><br><span class="line"><span class="comment">   注释2*/</span></span><br></pre></td></tr></table></figure>
 
-<ul>
-<li><strong>可见性</strong>：保证一个线程修改的变量，对其他线程立即可见</li>
-<li><strong>禁止指令重排序</strong>：编译器和 CPU 不会对 volatile 变量操作进行重排序</li>
-<li><strong>不保证原子性</strong>：++ 等复合操作不是原子性的，需要额外同步</li>
-<li>使用场景：状态标识、单例模式双重检查锁、轻量级同步</li>
-</ul>
 </details>
-
-
     </div>
     
     

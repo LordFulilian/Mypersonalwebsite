@@ -173,3 +173,20 @@ javascript
 <summary>谈谈对原型链的理解。</summary>
 - 对象通过内部[[prototype]]链接到另一个对象；属性查找沿原型链向上直到null。
 </details>
+<details>
+<summary>js如何实现继承？</summary>
+-常见方式：原型链继承、构造函数继承、组合继承、寄生组合继承（优化）、ES6class
+</details>
+<details>
+<summary>js有哪些判断类型的方法？</summary>
+-基本类型Undefined，Null，Boolean，Number，String，Symbol，BigInt
+</details>
+<details>
+<summary>如何判断一个变量是否数组？</summary>
+-推荐Array.isArray
+(arr);备选Object.prototype.toString.call(arr) === '[object Array]'。
+</details>
+<details>
+<summary>Null 和 undefined 的区别？</summary>
+-
+</details>

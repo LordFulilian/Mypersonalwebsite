@@ -3,7 +3,7 @@
 <html lang="English">
 <head>
     <meta charset="utf-8" />
-    <title>杭州之旅 | start.luck</title>
+    <title>UE5学习之路 | start.luck</title>
     <meta name="author" content="zhangqi" />
     <meta name="description" content="" />
     <meta name="keywords" content="" />
@@ -144,22 +144,22 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>杭州之旅</h1>
+        <h1>UE5学习之路</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/2/20
+            2025/11/20
         </span>
         
         <span class="category">
-            <a href="/boke/categories/%E5%86%85%E5%AE%B9%E5%88%86%E4%BA%AB/">
+            <a href="/boke/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                内容分享
+                技术分享
             </a>
         </span>
         
@@ -172,8 +172,8 @@
             
             <span class="tag">
                 
-                <a href="/boke/tags/%E6%97%85%E6%B8%B8/" style="color: #00a596">
-                    旅游
+                <a href="/boke/tags/UE/" style="color: #ff7d73">
+                    UE
                 </a>
             </span>
             
@@ -182,11 +182,45 @@
     </div>
     
     <div class="content" v-pre>
-        <h1 id="年初杭州"><a href="#年初杭州" class="headerlink" title="年初杭州"></a>年初杭州</h1><p>年初去杭州的分享</p>
-<h2 id="文章内容"><a href="#文章内容" class="headerlink" title="文章内容"></a>文章内容</h2><p>跟朋友特种兵一天转了西湖周围，西湖的景色是真好看啊(≧∀≦)ゞ</p>
-<p><img src="/boke/images/lvyou1.jpg"></p>
-<p>其他图片都在下面链接里啦</p>
-<p><a href="https://errorlook.github.io/boke/wallpaper/">链接</a></p>
+        <h1 id="UE5-学习之路"><a href="#UE5-学习之路" class="headerlink" title="UE5 学习之路"></a>UE5 学习之路</h1><p>决定系统学一下虚幻引擎，之前一直做前端和小程序开发，游戏方向是全新的领域。开篇文章记录学习路线和初步感受。</p>
+<h2 id="为什么学-UE"><a href="#为什么学-UE" class="headerlink" title="为什么学 UE"></a>为什么学 UE</h2><p>前端卷得厉害，想拓展一下技能边界。UE 在游戏行业是主流引擎，而且现在也大量用于影视虚拟制片和数字孪生，前景不错。</p>
+<h2 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h2><h3 id="第一阶段：C-基础巩固"><a href="#第一阶段：C-基础巩固" class="headerlink" title="第一阶段：C++ 基础巩固"></a>第一阶段：C++ 基础巩固</h3><p>UE 的核心开发语言是 C++。虽然大学学过，但工作后没用过，先花了两周回炉：</p>
+<ul>
+<li>指针与引用、内存管理（栈 vs 堆）</li>
+<li>面向对象三大特性：封装、继承、多态</li>
+<li>虚函数与虚函数表（vtable）的原理——面试高频题</li>
+<li>C++11 以后的现代特性：移动语义、智能指针、Lambda</li>
+<li>STL 容器：<code>vector</code>（对应 UE 的 <code>TArray</code>）、<code>map</code>、<code>unordered_map</code></li>
+</ul>
+<h3 id="第二阶段：引擎入门"><a href="#第二阶段：引擎入门" class="headerlink" title="第二阶段：引擎入门"></a>第二阶段：引擎入门</h3><p>装上 UE5 后第一感觉：编辑器真大，打开真慢。熟悉了几天基础操作：</p>
+<ul>
+<li>蓝图快速上手——可视化的逻辑编写，对非程序美术友好</li>
+<li>关卡编辑器、Actor、Component 的基本概念</li>
+<li>材质和 Niagara 粒子系统的基础了解</li>
+</ul>
+<h3 id="第三阶段：C-与蓝图协作"><a href="#第三阶段：C-与蓝图协作" class="headerlink" title="第三阶段：C++ 与蓝图协作"></a>第三阶段：C++ 与蓝图协作</h3><p>UE 项目不能纯蓝图，尤其是商业级项目。推荐的工作流：</p>
+<ul>
+<li><strong>C++ 负责</strong>：核心逻辑、算法、网络同步、底层系统架构</li>
+<li><strong>蓝图负责</strong>：数据配置（伤害值、血量）、角色动画、UI 拼接</li>
+</ul>
+<p>通过 <code>UFUNCTION</code> 和 <code>UPROPERTY</code> 暴露接口给蓝图，让程序和美术各司其职。</p>
+<h3 id="第四阶段：核心系统学习（进行中）"><a href="#第四阶段：核心系统学习（进行中）" class="headerlink" title="第四阶段：核心系统学习（进行中）"></a>第四阶段：核心系统学习（进行中）</h3><p>目前正在啃几个重量级系统：</p>
+<ol>
+<li><strong>GAS（Gameplay Ability System）</strong>：UE 最强的玩法框架，由 Ability、AttributeSet、GameplayEffect 组成。GE 完全数据驱动，不写逻辑代码就能配置技能效果。</li>
+<li><strong>网络同步</strong>：属性同步（Replication）和 RPC 的区别。简单说，持续状态用属性同步，瞬时事件用 RPC。</li>
+<li><strong>UI 框架</strong>：UMG 是蓝图可视化编辑器，底层基于纯 C++ 的 Slate。我倾向于用 MVC 模式设计 UI——C++ 写 Controller 监听数据，蓝图只负责显示。</li>
+</ol>
+<h2 id="UE-面试知识点"><a href="#UE-面试知识点" class="headerlink" title="UE 面试知识点"></a>UE 面试知识点</h2><p>学习过程中顺便整理了常见面试题，放在[知识库](&#x2F;Knowledge Base)里了，涵盖：</p>
+<ul>
+<li>TArray vs TList 的底层区别（连续内存 vs 链表，Cache Locality）</li>
+<li>多态与虚函数、<code>final</code> 关键字去虚化</li>
+<li>移动语义与右值引用</li>
+<li>GAS 中 GameplayEffect 的三种 Duration Policy</li>
+<li>Lua 在游戏中的协程应用与元表机制</li>
+<li>NavMesh 寻路与 A* 算法</li>
+</ul>
+<h2 id="初学感受"><a href="#初学感受" class="headerlink" title="初学感受"></a>初学感受</h2><p>UE 的学习曲线很陡，不像前端开个 Vite 项目就能跑。但深入之后发现引擎的设计思想很精妙——反射系统、GC 机制、数据驱动的 GameplayEffect 都是工业级的解决方案。</p>
+<p>后续会持续更新学习笔记，也计划做个小型 Demo 练手。路还很长，慢慢来。</p>
 
     </div>
     

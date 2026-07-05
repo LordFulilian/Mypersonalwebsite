@@ -1,192 +1,354 @@
+﻿UE 客户端开发进阶面试题库
 
-javascript基础
-
-<details>
-<summary>在 JavaScript 中创建对象有多种方法，下面将详细介绍几种常用方式：</summary>
+---
 
 <details>
-<summary>1. 对象字面量语法</summary>
+<summary>题目 1：UE容器与C++底层 (TArray vs 原生数组 vs TList)</summary>
 
-一组用逗号分隔的名称-值对，用大括号括起来：
+**面试提问**：讲一下UE里的TArray的特点？和C++原生数组有什么区别？TArray和TList的底层实现和数据结构有什么差别？
 
-```js
-var object = {
-  name: "Sudheer",
-  age: 34,
-};
-```
+**核心考点**：内存分布、缓存命中率（Cache Locality）、时间复杂度。
 
-对象字面量属性值可以是任何数据类型，包括数组、函数、嵌套对象。
+**踩分关键词**：动态扩容、连续内存、CPU缓存友好、双向链表。
 
-> 注意：这是创建对象最简单的方法之一，常用于创建简单的临时对象。
+**高分背诵模板**：
+
+核心结论：`TArray` 是 UE 中最核心的动态数组，基于连续内存实现；而 `TList` 是链表，内存是不连续的。
+
+1. TArray vs 原生数组：原生数组大小固定，缺乏越界检查和内存管理。`TArray` 是一个模板类，支持动态扩容，内置了序列化、越界断言等引擎特性的支持。
+
+2. TArray vs TList：
+- TArray：物理内存连续。最大优势是 CPU缓存友好（Cache Locality），遍历速度极快；缺点是在中间插入/删除元素会产生内存搬移。
+- TList：双向链表。物理内存分散，通过指针连接。优势是插入/删除只需修改指针；缺点是遍历时容易导致 Cache Miss，性能不如 `TArray`。
+
+实战：绝大多数情况优先使用 `TArray`。只有在需要极度频繁地在集合中间进行增删，且对遍历性能要求不高时，才会考虑链表结构。
 
 </details>
 
 <details>
-<summary>2. 使用 new Object() 构造函数</summary>
+<summary>题目 2：C++面向对象核心 (多态、虚函数、去虚化)</summary>
 
-通过 `new Object()` 创建一个空对象，然后动态添加属性：
+**面试提问**：多态是靠什么实现的？构造和析构函数关于虚函数有什么讲究？虚函数有什么额外开销？可以去虚化吗？
 
-```js
-var object = new Object();
-object.name = "Sudheer";
-object.age = 34;
-```
+**核心考点**：C++ 动态绑定的底层原理及性能代价。
 
-- 优点：直观、灵活  
-- 缺点：代码较繁琐，不如字面量简洁
+**踩分关键词**：虚函数表 (vtable)、虚表指针 (vptr)、内存泄漏、`final` 关键字。
 
-</details>
+**高分背诵模板**：
 
-<details>
-<summary>3. 使用构造函数</summary>
+核心结论：多态依赖虚函数实现（动态绑定）。底层是通过虚表指针（vptr）查找虚函数表（vtable）来确定调用哪个实际函数。
 
-定义一个函数作为对象模板，然后用 `new` 实例化：
+1. **析构必虚**：基类的析构函数必须是虚函数。否则，通过基类指针删除派生类对象时，只会调用基类析构，导致派生类特有资源无法释放，引发内存泄漏。
 
-```js
-function Person(name, age) {
-  this.name = name;
-  this.age = age;
-}
-var person = new Person("Sudheer", 34);
-```
+2. **构造禁虚**：构造函数不能是虚函数。因为在执行构造函数时，对象的类型还不完整，虚表指针还没有正确初始化，此时调用虚函数毫无意义。
 
-- 优点：可复用，适合批量创建类似对象  
-- 缺点：方法会被每个实例复制一份，占内存
+3. **额外开销**：每个对象增加了一个指针大小的内存（vptr）；调用时需经过一次间接寻址，增加时间开销，且容易打断 CPU 流水线。
+
+实战：去虚化（Devirtualization）是编译器的一种优化手段。如果在写代码时明确某个类或函数不会再被继承或重写，加上 `final` 关键字，能明确告诉编译器直接静态绑定，省去查表的开销。
 
 </details>
 
 <details>
-<summary>4. 使用 Object.create()</summary>
+<summary>题目 3：现代C++特性 (移动语义)</summary>
 
-从指定原型对象创建一个新对象：
+**面试提问**：了解 C++ 的移动语义（Move Semantics）吗？
 
-```js
-var proto = { 
-  greet() { console.log("Hi"); } 
-};
-var object = Object.create(proto);
-object.name = "Sudheer";
-```
+**核心考点**：C++11 性能优化利器，深拷贝的性能瓶颈。
 
-- 优点：可直接指定原型，更灵活的继承控制
+**踩分关键词**：右值引用、`std::move`、资源窃取、避免深拷贝。
 
-</details>
+**高分背诵模板**：
 
-<details>
-<summary>5. 使用类（class）语法</summary>
+核心结论：移动语义是 C++11 引入的特性，旨在消除不必要的对象深度拷贝，提升性能。
 
-使用 ES6 的 `class` 创建对象：
+传统拷贝：把临时对象的数据完完整整复制一份到新对象，然后销毁临时对象，开销很大。
 
-```js
-class Person {
-  constructor(name, age) {
-    this.name = name;
-    this.age = age;
-  }
-}
-const person = new Person("Sudheer", 34);
-```
+移动语义：利用右值引用（`&&`），直接"窃取"临时对象（右值）的内存资源。比如直接转移指针的所有权，将原对象的指针置空即可。搭配 `std::move` 可以将左值强制转为右值进行移动。
 
-- 优点：语法清晰，结构化强  
-- 缺点：语法糖，本质仍基于原型继承
+实战：在做系统级开发时，如果遇到返回大型 `TArray` 或传递大体积对象，利用移动语义能极大地减少内存的重复分配与释放。
 
 </details>
 
+<details>
+<summary>题目 4：UE开发流 (C++与蓝图配合、设计模式)</summary>
+
+**面试提问**：你用 C++ 和蓝图是怎么配合开发的？你常用的设计模式有哪些？
+
+**核心考点**：是否具备"工业级"开发思维，能否合理划分代码层级，避免"蓝图屎山"。
+
+**踩分关键词**：C++ 做基类/逻辑、蓝图做派生/数据配置、MVC/UI框架。
+
+**高分背诵模板**：
+
+核心结论：坚持"C++ 负责核心逻辑与底层架构，蓝图负责数据配置与美术资源拼接"的工作流，避免纯蓝图项目。
+
+1. **C++ 的职责**：所有复杂的运算、网络同步、系统设计全部用 C++ 完成，通过 `UFUNCTION` 和 `UPROPERTY` 暴露接口。
+
+2. **蓝图的职责**：作为 C++ 类的子类，用于挂载模型、特效、UI 动画，以及配置诸如伤害系数、生命值等基础数据（Data-Driven）。
+
+实战：在设计 UI 架构时，大量借鉴 MVC 模式。用 C++ 编写 Widget Controller 负责监听底层数据，蓝图仅负责"接收广播并更新显示"。不仅解耦，而且在 IDE 中排查逻辑问题时一目了然。
+
 </details>
 
+<details>
+<summary>题目 5：UE核心系统 (GAS 与 GameplayEffect)</summary>
 
-数据库基础
-<details>
-<summary>sql支持以下三种注释</summary>
-```sql
-select *
-from mytable;--注释
-/*注释1
-   注释2*/
-```
+**面试提问**：GAS了解吗？讲一下 GameplayEffect 具体的应用场景。
 
-</details>
+**核心考点**：UE 最强玩法框架理解深度。
 
-html,css
-<details>
-<summary>DOCTYPE 的作用是什么？</summary>
-- <!DOCTYPE>声明位于HTML文档中的第一行，处于< html>标签之前。告知浏览器的解析器用什么文档标准解析这个文档
-</details>
-<details>
-<summary>标准模式与兼容模式各有什么区别？</summary>
-- 标准模式的渲染方式和JS引擎的解析方式都是以该浏览器支持的最高标准运行。兼容模式中，页面以宽松的向后兼容的方式显示，模拟老式浏览器的行为防止站点无法工作
-</details>
-<details>
-<summary>讲一下盒模型，普通盒模型和怪异盒模型有什么区别？</summary>
-- 盒模型content,内边距padding，边框border,外边距margin。<br>
-- box-sizing: content-box（普通盒模型）：width/height只包含内容宽高，padding/border叠加在外面。<br>
-- box-sizing：border-box（怪异盒模型）：width/height包含content+padding<br>
-</details>
-<details>
-<summary>块元素和行内元素区别是什么？常见块元素和行内元素有哪些？</summary>
--块级元素独占一行可设置宽高；行内元素不独占行、不可设置宽高（可用inline-bock或flex改变行为 
-</details>
-<details>
-<summary>HTML语义化标签 有哪些？</summary>
--header,nav,main,article,section,aside,footer,figure,figcaption,time,adress等
-</details>
-<details>
-<summary>伪类和伪元素的区别是什么？</summary>
--伪类（：hover）表示状态/位置；伪元素（::before）创建虚拟子元素插入内容
-</details>
-<details>
-<summary>CSS如何实现垂直居中？</summary>
--最通常的方式是Flex：display:flex;align-items:center;justify-content:center;
-</details>
-<details>
-<summary>CSS常见的选择器有哪些？</summary>
--元素、类、id、后代、子选择器、相邻兄弟、通用兄弟、属性选择器、伪类、伪元素。
-</details>
-<details>
-<summary>CSS的优先级如何计算？</summary>
--优先级：内联>id>class/attribute/pseudo-class>element/pseudo-element;!important可打断常规规则
-</details>
-<details>
-<summary>长度单位px、em和rem的区别是什么？</summary>
--px绝对，em相对当前字体（会累积），rem相对根（html）字体
-</details>
-<details>
-<summary>讲一下flex弹性盒布局？</summary>
--父容器display:flex定义主轴与交叉轴，常用属性：justify-content，align-items，flex-wrap；子项flex控制伸缩
-</details>
-<details>
-<summary>浮动塌陷问题解决方法是什么？</summary>
--父元素包含浮动子元素导致高度塌陷；解决：clearfix（::after）、overflow：auto或display：flow-root
-</details>
-<details>
-<summary>position属性的值有哪些？各个值是什么含义？</summary>
--static，relative，absolute，fixed，sticky。分别说明是否脱离文档流与参考物
-</details>
-<details>
-<summary>BFC、IFC是什么？</summary>
--BFC(Block Formatting Context)是独立布局环境（防止margin折叠、包含浮动），触发方式包括overflow非visible、float、display:flow-root等
+**踩分关键词**：AttributeSet、Ability、GameplayEffect (GE)、Duration Policy。
+
+**高分背诵模板**：
+
+核心结论：GAS 是 UE 提供的一套高度数据驱动的技能系统，主要由 Ability（技能逻辑）、AttributeSet（属性集）和 GameplayEffect（效果）组成。
+
+GameplayEffect (GE) 的核心作用是修改属性和状态，完全是数据驱动的（纯配置，不写逻辑）。
+
+应用场景分三类：
+1. **Instant（瞬时）**：如受到 100 点直接伤害、吃血包瞬间回血。
+2. **Duration（持续）**：如持续 5 秒的流血 debuff，或者 10 秒的加速增益。
+3. **Infinite（无限）**：如装备上一件加攻击力的光环，直到装备脱下才移除。
+
+实战：在 C++ 里处理 GAS 伤害计算时，常利用 CurveTable（曲线表）配合 GE 读取防御系数。对于 UI 上各种百分比属性的显示，在 C++ 中完成 FString 的精确格式化再抛出，保证数据流的严谨性。
+
 </details>
 
-javascript
 <details>
-<summary>谈谈对原型链的理解。</summary>
-- 对象通过内部[[prototype]]链接到另一个对象；属性查找沿原型链向上直到null。
+<summary>题目 6：网络同步基石 (属性同步 vs RPC)</summary>
+
+**面试提问**：UE里网络同步的两种方式分别是什么？有什么区别？RPC和属性同步怎么选？
+
+**核心考点**：多人游戏网络架构基础。
+
+**踩分关键词**：状态同步 (Replication)、事件调用 (RPC)、带宽优化、可靠性 (Reliable)。
+
+**高分背诵模板**：
+
+核心结论：属性同步（Replicated）用于同步实体的"状态"，RPC（远程过程调用）用于触发特定的"事件"。
+
+1. **属性同步**：底层由引擎接管，只同步变化的数据。适用场景：血量变化、玩家位置等持续存在、需要后加入玩家也能获取的状态。
+
+2. **RPC**：分 Server、Client、NetMulticast。适用场景：开火特效、播放一次爆炸声音等瞬时发生、不需要持久化的事件。
+
+实战：同步积分或血量时，使用属性同步附带 `RepNotify` 函数，客户端在收到属性变化时同时触发 UI 更新逻辑，既省带宽又安全，避免乱用 RPC 导致的网络拥堵。
+
 </details>
+
 <details>
-<summary>js如何实现继承？</summary>
--常见方式：原型链继承、构造函数继承、组合继承、寄生组合继承（优化）、ES6class
+<summary>题目 7：Lua 协程与线程 (Coroutine vs Thread)</summary>
+
+**面试提问**：说一下 Lua 协程具体怎么用，应用场景？协程和线程的区别是什么？
+
+**核心考点**：并发模型的理解，非抢占式与抢占式多任务的区别。
+
+**踩分关键词**：用户态、协作式、`coroutine.yield` / `resume`、无数据竞争。
+
+**高分背诵模板**：
+
+核心结论：线程是由操作系统调度的（抢占式），而 Lua 协程是在用户态由代码主动控制交出执行权的（协作式）。
+
+1. **区别**：多线程存在资源竞争，需要加锁；Lua 协程在任何时刻只能有一个协程运行，通过 `yield` 挂起，`resume` 恢复，天然不存在数据竞争（线程安全）。
+
+2. **具体用法**：使用 `coroutine.create` 创建协程，执行复杂逻辑时适时调用 `coroutine.yield()` 让出主线程。
+
+实战：协程非常适合处理分步异步任务。例如在加载大量配置表时，为了防止主线程卡顿（掉帧），用协程每帧只处理一部分数据，实现平滑的异步分帧加载。
+
 </details>
+
 <details>
-<summary>js有哪些判断类型的方法？</summary>
--基本类型Undefined，Null，Boolean，Number，String，Symbol，BigInt
+<summary>题目 8：Lua 面向对象与元表机制 (OOP & 只读属性)</summary>
+
+**面试提问**：Lua 是如何实现面向对象的？如果要给 Lua 里的变量设置只读属性，你会怎么做？
+
+**核心考点**：Lua `Metatable`（元表）的深度运用。
+
+**踩分关键词**：Table 模拟类、`__index` 查找机制、`__newindex` 拦截赋值。
+
+**高分背诵模板**：
+
+核心结论：Lua 利用 `table` 加上 `metatable`（元表）的机制来模拟面向对象。
+
+1. **面向对象实现**：访问 `table` 中不存在的字段时，触发 `__index` 元方法。将子对象的元表的 `__index` 指向父对象，即可实现继承。
+
+2. **设置只读属性**：创建一个空的代理 Table 和一个隐藏的实际数据 Table。为代理 Table 设置元表：
+   - 重写 `__index`：返回隐藏数据 Table 中的值。
+   - 重写 `__newindex`：直接抛出错误，拦截赋值操作。
+
+实战：在项目中，利用 `__newindex` 拦截机制将核心全局配置表（如武器基础伤害表）包装成只读态，提高代码架构的安全性。
+
 </details>
+
 <details>
-<summary>如何判断一个变量是否数组？</summary>
--推荐Array.isArray
-(arr);备选Object.prototype.toString.call(arr) === '[object Array]'。
+<summary>题目 9：Lua 存储结构与 GC 机制</summary>
+
+**面试提问**：Lua 的 table 存储结构是什么样的？Lua 的 GC（垃圾回收）机制是什么？
+
+**核心考点**：Lua Table 的底层 C 源码实现结构，以及增量式垃圾回收算法。
+
+**踩分关键词**：数组部分 + 哈希部分、三色标记清除算法。
+
+**高分背诵模板**：
+
+核心结论：Lua 的 Table 底层包含数组部分和哈希表部分。GC 采用增量式的三色标记清除算法。
+
+1. **Table 结构**：连续数字作为 key 会被引擎存入"连续数组部分"提升速度。非连续数字或字符串 key 存入"哈希表部分"。
+
+2. **GC 机制**：
+   - 白色：未被访问到的对象（会被清除）。
+   - 灰色：已被访问到，但它引用的对象还没扫描完。
+   - 黑色：已被访问，且引用的对象也已扫描完（存活）。
+
+实战：开发中尽量保证数组元素的连续性，避免中间插入 `nil` 产生空洞（Hole），防止数据从数组部分退化到哈希部分导致性能损耗。
+
 </details>
+
 <details>
-<summary>Null 和 undefined 的区别？</summary>
--
+<summary>题目 10：UE 网络底层与 RPC 序列化 (UDP/TCP & 数据处理)</summary>
+
+**面试提问**：UE 的网络同步底层原理是什么？UE 的 RPC 怎么去使用 TCP 和 UDP？发送 RPC 序列化怎么处理的？
+
+**核心考点**：UE 网络的底层协议栈，数据的序列化压缩。
+
+**踩分关键词**：基于 UDP、自建可靠层、滑动窗口、`FArchive`、位流序列化。
+
+**高分背诵模板**：
+
+核心结论：UE 的网络底层完全基于 UDP。为了保证可靠性，UE 在 UDP 之上自建了一套"可靠性层"。
+
+1. **UDP/TCP 模拟**：`Unreliable` RPC 是纯 UDP；`Reliable` RPC 时，引擎内部分配序列号，若未收到 Ack 则重传，即"基于 UDP 模拟 TCP"。
+
+2. **RPC 序列化**：底层通过 `FArchive` 系统进行位级别（Bit-level）的序列化读写（`NetBitWriter` / `NetBitReader`）。
+
+实战：同步结构体数据时，重写结构体的 `NetSerialize` 函数。例如将 32 位浮点数量化压缩成 8 位整数进行传输，可大幅度节省带宽。
+
+</details>
+
+<details>
+<summary>题目 11：高级架构：UI 框架设计</summary>
+
+**面试提问**：如果让你设计 UI 框架，你会怎么实现？
+
+**核心考点**：业务解耦能力、内存管理、生命周期控制。
+
+**踩分关键词**：MVC/MVVM 架构、UIManager、UI 栈控制、资源对象池。
+
+**高分背诵模板**：
+
+核心结论：采用 MVC/MVVM 架构结合 UIManager（UI管理器），实现"表现与逻辑严格分离"。
+
+1. **分层设计**：C++ 编写 Widget Controller 监听底层数据；蓝图作为 View 接收广播播放动画。
+2. **UIManager 控制中心**：挂载在 `GameInstance` 上，维护 UI 栈。打开新页面暂停底层输入，关闭时出栈恢复。
+3. **资源管理**：常用的 UI（如血条、伤害数字）使用对象池隐藏复用，避免频繁实例化和 GC。
+
+实战：UI 层绝不直接读取底层属性集。Controller 绑定属性更新委托，数据变化后进行格式化处理，再抛给蓝图显示，实现彻底解耦。
+
+</details>
+
+<details>
+<summary>题目 12：高级网络同步 (预测与延迟补偿)</summary>
+
+**面试提问**：项目中的客户端预测和延迟补偿实现思路？服务器倒带是如何判断击中时间的？
+
+**核心考点**：FPS/动作游戏核心网络架构，解决延迟带来的玩家体验撕裂。
+
+**踩分关键词**：本地预表现、服务器校验与拉回、快照（Snapshot）、时间戳。
+
+**高分背诵模板**：
+
+核心结论：客户端预测掩盖本地操作延迟，延迟补偿（服务器倒带）保证"所见即所得"的射击体验。
+
+1. **客户端预测**：本地输入直接走（预表现），并记录带时间戳的移动请求。若服务器算出的位置差距过大，客户端会被强制"拉回"。
+
+2. **服务器倒带**：客户端开火带上画面时间戳发给服务器。服务器维护一份玩家过去历史位置的"快照"。服务器收到请求后，将受击者的碰撞体"倒带"回对应时刻，进行命中检测。
+
+实战：延迟补偿有较大 CPU 开销。为防止"高延迟玩家太占优"产生穿墙击杀，服务器通常设置倒带时间上限（如最大 200ms），超过阈值的包直接判为无效。
+
+</details>
+
+<details>
+<summary>题目 13：UE底层基石 (UObject 与 UPROPERTY)</summary>
+
+**面试提问**：UObject有了解吗？UPROPERTY是怎么实现的？
+
+**核心考点**：虚幻引擎反射系统和垃圾回收（GC）的根基。
+
+**踩分关键词**：UHT、宏标记、`.generated.h`、垃圾回收（GC）。
+
+**高分背诵模板**：
+
+核心结论：`UObject` 是所有托管对象的基类，提供 GC、反射、序列化功能。`UPROPERTY` 是反射和 GC 追踪的入口。
+
+实现原理：`UPROPERTY()` 在 C++ 层是空宏，供 UHT (Unreal Header Tool) 扫描。编译前，UHT 自动生成包含反射数据的 `.generated.h` 文件，使引擎在运行时获知内存布局，从而实现蓝图可见和 GC 追踪。
+
+实战：核心数据继承自 `UObject` 并通过 `UPROPERTY` 暴露给蓝图读取。遇到反射绑定报错时，可通过追踪 UHT 生成的 `*.gen.cpp` 文件进行深入排查。
+
+</details>
+
+<details>
+<summary>题目 14：AI与3D数学 (NavMesh与点在三角形内)</summary>
+
+**面试提问**：了解 NavMesh 底层寻路和 A* 算法吗？判断点在三角形内外怎么做？
+
+**核心考点**：游戏 AI 寻路基础和基础 3D 几何算法。
+
+**踩分关键词**：多边形网格、启发式函数、叉乘。
+
+**高分背诵模板**：
+
+核心结论：NavMesh 将可行走区域划分为凸多边形；A* 是底层寻路核心。判断点在三角形内最常用叉乘法。
+
+1. **NavMesh & A\***：A\* 算法维护优先级队列，结合代价函数 F = G + H 在多边形节点间寻找最优路径。
+
+2. **点在三角形内**：三角形顶点 A, B, C，测点 P。按照逆时针计算叉乘，若 `AB × AP`，`BC × BP`，`CA × CP` 的 Z 轴方向符号全部相同，则 P 在内部。
+
+实战：处理 AI 巡逻、追击时，结合行为树利用引擎原生的 `MoveTo` 节点调用底层的寻路模块。
+
+</details>
+
+<details>
+<summary>题目 15：C++ 内存与数据结构 (智能指针与 map)</summary>
+
+**面试提问**：普通指针占几个字节？为什么不能大量使用智能指针？unordered_map 和 map 的区别？
+
+**核心考点**：内存管理意识、STL 底层数据结构与时间复杂度。
+
+**踩分关键词**：控制块开销、原子操作、红黑树、哈希表。
+
+**高分背诵模板**：
+
+核心结论：指针大小取决于架构（32位4字节，64位8字节）。`map` 基于红黑树，`unordered_map` 基于哈希表。
+
+1. **智能指针开销**：`shared_ptr` 包含对象指针外，还分配控制块存储引用计数。引用计数增减是原子操作，高频调用下有不可忽视的性能开销。
+
+2. **map vs unordered_map**：
+   - map：红黑树，元素有序，时间复杂度 O(log N)。
+   - unordered_map：哈希表，元素无序，平均时间复杂度 O(1)，但扩容和哈希冲突有较大开销。
+
+实战：除非跨线程生命周期管理，局部临时指针优先直接使用裸指针。
+
+</details>
+
+<details>
+<summary>题目 16：UE 委托与 UI 架构 (Delegate 与 UMG/Slate)</summary>
+
+**面试提问**：什么时候用代理（Delegate），有哪些？UMG 和 Slate 区别，为什么需要 Slate？
+
+**核心考点**：观察者模式的应用、UE 界面渲染底层。
+
+**踩分关键词**：解耦、单播/多播/动态、C++ 底层 UI 框架。
+
+**高分背诵模板**：
+
+核心结论：代理用于系统间解耦。Slate 是底层的 C++ UI 框架，UMG 是对 Slate 的蓝图可视化封装。
+
+1. **代理类型**：
+   - 单播：绑定一个函数，有返回值。
+   - 多播：绑定多个函数，无返回值。
+   - 动态：可序列化，能在蓝图中调用和绑定，执行稍慢。
+
+2. **UMG vs Slate**：Slate 纯 C++ 编写性能极高，但不直观。UMG 提供可视化编辑器，让非程序人员拼装 UI。
+
+实战：在 UI 架构中，C++ 写 Widget Controller 监听底层事件，大量使用 Dynamic Multicast Delegate。底层逻辑触发多播，蓝图 UI 绑定多播更新，实现经典的 MVC 数据流。
+
 </details>

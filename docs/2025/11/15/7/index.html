@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <meta charset="utf-8" />
+    <title>微信小程序开发技巧与踩坑记录 | start.luck</title>
+    <meta name="author" content="zhangqi" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/boke/images/1.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/boke/js/lib/highlight.js"></script>
+
+
+
+<script src="/boke/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+<script src="https://s4.zstatic.net/ajax/libs/twikoo/1.6.31/twikoo.all.min.js"></script>
+
+
+
+<link rel="stylesheet" href="/boke/css/main.css" />
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/boke/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/boke/">
+            <span>START.LUCK</span>
+        </a>
+        
+        <a href="/boke/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;Home</span>
+        </a>
+        
+        <a href="/boke/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;About</span>
+        </a>
+        
+        <a href="/boke/Knowledge%20Base">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;Knowledge Base</span>
+        </a>
+        
+        <a href="/boke/wallpaper">
+            <i class="fa-solid fa-image fa-fw"></i>
+            <span>&ensp;wallpaper</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;START.LUCK</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/boke/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Home</div>
+                    </div>
+                </a>
+                
+                <a href="/boke/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">About</div>
+                    </div>
+                </a>
+                
+                <a href="/boke/Knowledge%20Base">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">Knowledge Base</div>
+                    </div>
+                </a>
+                
+                <a href="/boke/wallpaper">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-image fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">wallpaper</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>微信小程序开发技巧与踩坑记录</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2025/11/15
+        </span>
+        
+        <span class="category">
+            <a href="/boke/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                技术分享
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/boke/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="color: #ff7d73">
+                    小程序
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <h1 id="微信小程序开发技巧与踩坑记录"><a href="#微信小程序开发技巧与踩坑记录" class="headerlink" title="微信小程序开发技巧与踩坑记录"></a>微信小程序开发技巧与踩坑记录</h1><p>最近在写一个小程序项目，从零开始踩了不少坑，记录一下学习过程中遇到的技巧和问题。</p>
+<h2 id="环境与工具"><a href="#环境与工具" class="headerlink" title="环境与工具"></a>环境与工具</h2><p>开发工具用的是微信开发者工具，真机调试比模拟器靠谱太多。模拟器上正常的东西真机上不一定能用，特别是涉及硬件 API 的时候。</p>
+<h2 id="核心技巧"><a href="#核心技巧" class="headerlink" title="核心技巧"></a>核心技巧</h2><h3 id="1-彻底放弃-Web-思维"><a href="#1-彻底放弃-Web-思维" class="headerlink" title="1. 彻底放弃 Web 思维"></a>1. 彻底放弃 Web 思维</h3><p>小程序不是浏览器环境，没有 <code>window</code>、<code>document</code>、<code>localStorage</code> 这些东西。一开始总是下意识写 <code>document.querySelector</code>，然后报错才反应过来。</p>
+<ul>
+<li>页面结构只能用小程序原生标签：<code>&lt;view&gt;</code>、<code>&lt;text&gt;</code>、<code>&lt;image&gt;</code>、<code>&lt;button&gt;</code> 等</li>
+<li>数据绑定用 <code>this.setData(&#123;&#125;)</code>，不能直接赋值 <code>this.data.xxx = yyy</code>，视图不会更新</li>
+<li>本地存储用 <code>wx.setStorageSync</code> 和 <code>wx.getStorageSync</code></li>
+</ul>
+<h3 id="2-API-版本兼容"><a href="#2-API-版本兼容" class="headerlink" title="2. API 版本兼容"></a>2. API 版本兼容</h3><p>小程序的 API 一直在更新，很多旧 API 已经废弃。获取设备信息的时候，以前用 <code>wx.getSystemInfoSync</code>，现在必须拆开用：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 新写法，兼容 HarmonyOS 等平台</span></span><br><span class="line"><span class="keyword">const</span> deviceInfo = wx.<span class="title function_">getDeviceInfo</span>();   <span class="comment">// 设备信息</span></span><br><span class="line"><span class="keyword">const</span> windowInfo = wx.<span class="title function_">getWindowInfo</span>();   <span class="comment">// 窗口信息</span></span><br><span class="line"><span class="keyword">const</span> appBaseInfo = wx.<span class="title function_">getAppBaseInfo</span>(); <span class="comment">// App 基础信息</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-列表渲染的性能优化"><a href="#3-列表渲染的性能优化" class="headerlink" title="3. 列表渲染的性能优化"></a>3. 列表渲染的性能优化</h3><p>列表渲染用 <code>wx:for</code>，<code>wx:key</code> 是一定要加的，否则数据变更时小程序做全量 diff，性能很差：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">wx:for</span>=<span class="string">&quot;&#123;&#123;list&#125;&#125;&quot;</span> <span class="attr">wx:key</span>=<span class="string">&quot;id&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span>&gt;</span>&#123;&#123;item.name&#125;&#125;<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>长列表建议用虚拟列表的思路，只渲染可视区域的数据。我用了一个简单的分页滚动方案，<code>onReachBottom</code> 触底加载更多。</p>
+<h3 id="4-条件渲染-wx-if-vs-hidden"><a href="#4-条件渲染-wx-if-vs-hidden" class="headerlink" title="4. 条件渲染 wx:if vs hidden"></a>4. 条件渲染 wx:if vs hidden</h3><p><code>wx:if</code> 是真正的条件渲染，不满足条件时不渲染 DOM；<code>hidden</code> 只是 <code>display:none</code>。</p>
+<ul>
+<li>切换频繁用 <code>hidden</code>（省去创建销毁开销）</li>
+<li>初始条件大概率不满足用 <code>wx:if</code>（省内存）</li>
+</ul>
+<h3 id="5-组件化开发"><a href="#5-组件化开发" class="headerlink" title="5. 组件化开发"></a>5. 组件化开发</h3><p>小程序支持 <code>Component(&#123;&#125;)</code> 构造函数，生命周期和 <code>Page(&#123;&#125;)</code> 不一样，别混用：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>生命周期</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Page</td>
+<td><code>onLoad</code> → <code>onShow</code> → <code>onReady</code></td>
+</tr>
+<tr>
+<td>Component</td>
+<td><code>created</code> → <code>attached</code> → <code>ready</code> → <code>detached</code></td>
+</tr>
+</tbody></table>
+<p>组件间通信用 <code>this.triggerEvent(&#39;eventName&#39;, &#123; data &#125;)</code>，父组件通过 <code>bind:eventName</code> 监听。</p>
+<h2 id="踩过的坑"><a href="#踩过的坑" class="headerlink" title="踩过的坑"></a>踩过的坑</h2><h3 id="坑1：setData-的异步问题"><a href="#坑1：setData-的异步问题" class="headerlink" title="坑1：setData 的异步问题"></a>坑1：setData 的异步问题</h3><p><code>setData</code> 是异步的，连续调用可能合并。如果需要在数据更新后立即获取最新 DOM，要用回调：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="title function_">setData</span>(&#123; <span class="attr">list</span>: newList &#125;, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 视图更新完成后的回调</span></span><br><span class="line">  <span class="keyword">const</span> query = wx.<span class="title function_">createSelectorQuery</span>();</span><br><span class="line">  query.<span class="title function_">select</span>(<span class="string">&#x27;.list&#x27;</span>).<span class="title function_">boundingClientRect</span>();</span><br><span class="line">  query.<span class="title function_">exec</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123; <span class="comment">/* ... */</span> &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="坑2：图片路径问题"><a href="#坑2：图片路径问题" class="headerlink" title="坑2：图片路径问题"></a>坑2：图片路径问题</h3><p>小程序包有大小限制（主包 2MB），所有图片尽量用网络图片或者放到云存储。本地图片路径在真机上有时会莫名其妙 404。</p>
+<h3 id="坑3：事件冒泡"><a href="#坑3：事件冒泡" class="headerlink" title="坑3：事件冒泡"></a>坑3：事件冒泡</h3><p><code>bindtap</code> 会冒泡，<code>catchtap</code> 阻止冒泡。在一个可点击的列表中，子元素点击事件记得用 <code>catchtap</code>：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">wx:for</span>=<span class="string">&quot;&#123;&#123;list&#125;&#125;&quot;</span> <span class="attr">wx:key</span>=<span class="string">&quot;id&quot;</span> <span class="attr">bindtap</span>=<span class="string">&quot;onItemTap&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">catchtap</span>=<span class="string">&quot;onDelete&quot;</span>&gt;</span>删除<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这样点删除按钮不会触发列表项的点击事件。</p>
+<h3 id="坑4：分包加载"><a href="#坑4：分包加载" class="headerlink" title="坑4：分包加载"></a>坑4：分包加载</h3><p>主包超过 2MB 就无法上传。项目大了必须拆分包。在 <code>app.json</code> 里配置：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;subpackages&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;root&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pages/sub/&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;pages&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;detail/detail&quot;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>小程序开发入门不难，但细节很多。最大的感触是必须忘掉浏览器那一套，遵循小程序的组件化思维。遇到问题先看微信官方文档，比搜博客管用。</p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    <div id="comment">
+        <div id="twikoo-container"></div>
+    </div>
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2024 - 2026 start.luck
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;zhangqi
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/boke/js/main.js"></script>
+    
+    
+
+
+
+<script>
+    twikoo.init({
+        el: "#twikoo-container",
+        envId: "https://twi-jjjyhrfvu-errorlooks-projects.vercel.app",
+        region: "ap-guangzhou",
+        path: location.pathname,
+        lang: "zh-CN",
+    })
+</script>
+
+
+    
+</body>
+</html>

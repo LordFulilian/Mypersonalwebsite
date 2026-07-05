@@ -151,168 +151,302 @@
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2025/10/14
+            2026/7/5
         </span>
         
         
     </div>
     
     <div class="content" v-pre>
-        <p>javascript基础</p>
+        <p>UE 客户端开发进阶面试题库</p>
+<hr>
 <details>
-<summary>在 JavaScript 中创建对象有多种方法，下面将详细介绍几种常用方式：</summary>
+<summary>题目 1：UE容器与C++底层 (TArray vs 原生数组 vs TList)</summary>
 
-<details>
-<summary>1. 对象字面量语法</summary>
-
-<p>一组用逗号分隔的名称-值对，用大括号括起来：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> object = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;Sudheer&quot;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">34</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>对象字面量属性值可以是任何数据类型，包括数组、函数、嵌套对象。</p>
-<blockquote>
-<p>注意：这是创建对象最简单的方法之一，常用于创建简单的临时对象。</p>
-</blockquote>
-</details>
-
-<details>
-<summary>2. 使用 new Object() 构造函数</summary>
-
-<p>通过 <code>new Object()</code> 创建一个空对象，然后动态添加属性：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> object = <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line">object.<span class="property">name</span> = <span class="string">&quot;Sudheer&quot;</span>;</span><br><span class="line">object.<span class="property">age</span> = <span class="number">34</span>;</span><br></pre></td></tr></table></figure>
-
+<p><strong>面试提问</strong>：讲一下UE里的TArray的特点？和C++原生数组有什么区别？TArray和TList的底层实现和数据结构有什么差别？</p>
+<p><strong>核心考点</strong>：内存分布、缓存命中率（Cache Locality）、时间复杂度。</p>
+<p><strong>踩分关键词</strong>：动态扩容、连续内存、CPU缓存友好、双向链表。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：<code>TArray</code> 是 UE 中最核心的动态数组，基于连续内存实现；而 <code>TList</code> 是链表，内存是不连续的。</p>
+<ol>
+<li><p>TArray vs 原生数组：原生数组大小固定，缺乏越界检查和内存管理。<code>TArray</code> 是一个模板类，支持动态扩容，内置了序列化、越界断言等引擎特性的支持。</p>
+</li>
+<li><p>TArray vs TList：</p>
+</li>
+</ol>
 <ul>
-<li>优点：直观、灵活  </li>
-<li>缺点：代码较繁琐，不如字面量简洁</li>
+<li>TArray：物理内存连续。最大优势是 CPU缓存友好（Cache Locality），遍历速度极快；缺点是在中间插入&#x2F;删除元素会产生内存搬移。</li>
+<li>TList：双向链表。物理内存分散，通过指针连接。优势是插入&#x2F;删除只需修改指针；缺点是遍历时容易导致 Cache Miss，性能不如 <code>TArray</code>。</li>
 </ul>
+<p>实战：绝大多数情况优先使用 <code>TArray</code>。只有在需要极度频繁地在集合中间进行增删，且对遍历性能要求不高时，才会考虑链表结构。</p>
 </details>
 
 <details>
-<summary>3. 使用构造函数</summary>
+<summary>题目 2：C++面向对象核心 (多态、虚函数、去虚化)</summary>
 
-<p>定义一个函数作为对象模板，然后用 <code>new</code> 实例化：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Person</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">age</span> = age;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Sudheer&quot;</span>, <span class="number">34</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>面试提问</strong>：多态是靠什么实现的？构造和析构函数关于虚函数有什么讲究？虚函数有什么额外开销？可以去虚化吗？</p>
+<p><strong>核心考点</strong>：C++ 动态绑定的底层原理及性能代价。</p>
+<p><strong>踩分关键词</strong>：虚函数表 (vtable)、虚表指针 (vptr)、内存泄漏、<code>final</code> 关键字。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：多态依赖虚函数实现（动态绑定）。底层是通过虚表指针（vptr）查找虚函数表（vtable）来确定调用哪个实际函数。</p>
+<ol>
+<li><p><strong>析构必虚</strong>：基类的析构函数必须是虚函数。否则，通过基类指针删除派生类对象时，只会调用基类析构，导致派生类特有资源无法释放，引发内存泄漏。</p>
+</li>
+<li><p><strong>构造禁虚</strong>：构造函数不能是虚函数。因为在执行构造函数时，对象的类型还不完整，虚表指针还没有正确初始化，此时调用虚函数毫无意义。</p>
+</li>
+<li><p><strong>额外开销</strong>：每个对象增加了一个指针大小的内存（vptr）；调用时需经过一次间接寻址，增加时间开销，且容易打断 CPU 流水线。</p>
+</li>
+</ol>
+<p>实战：去虚化（Devirtualization）是编译器的一种优化手段。如果在写代码时明确某个类或函数不会再被继承或重写，加上 <code>final</code> 关键字，能明确告诉编译器直接静态绑定，省去查表的开销。</p>
+</details>
 
+<details>
+<summary>题目 3：现代C++特性 (移动语义)</summary>
+
+<p><strong>面试提问</strong>：了解 C++ 的移动语义（Move Semantics）吗？</p>
+<p><strong>核心考点</strong>：C++11 性能优化利器，深拷贝的性能瓶颈。</p>
+<p><strong>踩分关键词</strong>：右值引用、<code>std::move</code>、资源窃取、避免深拷贝。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：移动语义是 C++11 引入的特性，旨在消除不必要的对象深度拷贝，提升性能。</p>
+<p>传统拷贝：把临时对象的数据完完整整复制一份到新对象，然后销毁临时对象，开销很大。</p>
+<p>移动语义：利用右值引用（<code>&amp;&amp;</code>），直接”窃取”临时对象（右值）的内存资源。比如直接转移指针的所有权，将原对象的指针置空即可。搭配 <code>std::move</code> 可以将左值强制转为右值进行移动。</p>
+<p>实战：在做系统级开发时，如果遇到返回大型 <code>TArray</code> 或传递大体积对象，利用移动语义能极大地减少内存的重复分配与释放。</p>
+</details>
+
+<details>
+<summary>题目 4：UE开发流 (C++与蓝图配合、设计模式)</summary>
+
+<p><strong>面试提问</strong>：你用 C++ 和蓝图是怎么配合开发的？你常用的设计模式有哪些？</p>
+<p><strong>核心考点</strong>：是否具备”工业级”开发思维，能否合理划分代码层级，避免”蓝图屎山”。</p>
+<p><strong>踩分关键词</strong>：C++ 做基类&#x2F;逻辑、蓝图做派生&#x2F;数据配置、MVC&#x2F;UI框架。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：坚持”C++ 负责核心逻辑与底层架构，蓝图负责数据配置与美术资源拼接”的工作流，避免纯蓝图项目。</p>
+<ol>
+<li><p><strong>C++ 的职责</strong>：所有复杂的运算、网络同步、系统设计全部用 C++ 完成，通过 <code>UFUNCTION</code> 和 <code>UPROPERTY</code> 暴露接口。</p>
+</li>
+<li><p><strong>蓝图的职责</strong>：作为 C++ 类的子类，用于挂载模型、特效、UI 动画，以及配置诸如伤害系数、生命值等基础数据（Data-Driven）。</p>
+</li>
+</ol>
+<p>实战：在设计 UI 架构时，大量借鉴 MVC 模式。用 C++ 编写 Widget Controller 负责监听底层数据，蓝图仅负责”接收广播并更新显示”。不仅解耦，而且在 IDE 中排查逻辑问题时一目了然。</p>
+</details>
+
+<details>
+<summary>题目 5：UE核心系统 (GAS 与 GameplayEffect)</summary>
+
+<p><strong>面试提问</strong>：GAS了解吗？讲一下 GameplayEffect 具体的应用场景。</p>
+<p><strong>核心考点</strong>：UE 最强玩法框架理解深度。</p>
+<p><strong>踩分关键词</strong>：AttributeSet、Ability、GameplayEffect (GE)、Duration Policy。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：GAS 是 UE 提供的一套高度数据驱动的技能系统，主要由 Ability（技能逻辑）、AttributeSet（属性集）和 GameplayEffect（效果）组成。</p>
+<p>GameplayEffect (GE) 的核心作用是修改属性和状态，完全是数据驱动的（纯配置，不写逻辑）。</p>
+<p>应用场景分三类：</p>
+<ol>
+<li><strong>Instant（瞬时）</strong>：如受到 100 点直接伤害、吃血包瞬间回血。</li>
+<li><strong>Duration（持续）</strong>：如持续 5 秒的流血 debuff，或者 10 秒的加速增益。</li>
+<li><strong>Infinite（无限）</strong>：如装备上一件加攻击力的光环，直到装备脱下才移除。</li>
+</ol>
+<p>实战：在 C++ 里处理 GAS 伤害计算时，常利用 CurveTable（曲线表）配合 GE 读取防御系数。对于 UI 上各种百分比属性的显示，在 C++ 中完成 FString 的精确格式化再抛出，保证数据流的严谨性。</p>
+</details>
+
+<details>
+<summary>题目 6：网络同步基石 (属性同步 vs RPC)</summary>
+
+<p><strong>面试提问</strong>：UE里网络同步的两种方式分别是什么？有什么区别？RPC和属性同步怎么选？</p>
+<p><strong>核心考点</strong>：多人游戏网络架构基础。</p>
+<p><strong>踩分关键词</strong>：状态同步 (Replication)、事件调用 (RPC)、带宽优化、可靠性 (Reliable)。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：属性同步（Replicated）用于同步实体的”状态”，RPC（远程过程调用）用于触发特定的”事件”。</p>
+<ol>
+<li><p><strong>属性同步</strong>：底层由引擎接管，只同步变化的数据。适用场景：血量变化、玩家位置等持续存在、需要后加入玩家也能获取的状态。</p>
+</li>
+<li><p><strong>RPC</strong>：分 Server、Client、NetMulticast。适用场景：开火特效、播放一次爆炸声音等瞬时发生、不需要持久化的事件。</p>
+</li>
+</ol>
+<p>实战：同步积分或血量时，使用属性同步附带 <code>RepNotify</code> 函数，客户端在收到属性变化时同时触发 UI 更新逻辑，既省带宽又安全，避免乱用 RPC 导致的网络拥堵。</p>
+</details>
+
+<details>
+<summary>题目 7：Lua 协程与线程 (Coroutine vs Thread)</summary>
+
+<p><strong>面试提问</strong>：说一下 Lua 协程具体怎么用，应用场景？协程和线程的区别是什么？</p>
+<p><strong>核心考点</strong>：并发模型的理解，非抢占式与抢占式多任务的区别。</p>
+<p><strong>踩分关键词</strong>：用户态、协作式、<code>coroutine.yield</code> &#x2F; <code>resume</code>、无数据竞争。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：线程是由操作系统调度的（抢占式），而 Lua 协程是在用户态由代码主动控制交出执行权的（协作式）。</p>
+<ol>
+<li><p><strong>区别</strong>：多线程存在资源竞争，需要加锁；Lua 协程在任何时刻只能有一个协程运行，通过 <code>yield</code> 挂起，<code>resume</code> 恢复，天然不存在数据竞争（线程安全）。</p>
+</li>
+<li><p><strong>具体用法</strong>：使用 <code>coroutine.create</code> 创建协程，执行复杂逻辑时适时调用 <code>coroutine.yield()</code> 让出主线程。</p>
+</li>
+</ol>
+<p>实战：协程非常适合处理分步异步任务。例如在加载大量配置表时，为了防止主线程卡顿（掉帧），用协程每帧只处理一部分数据，实现平滑的异步分帧加载。</p>
+</details>
+
+<details>
+<summary>题目 8：Lua 面向对象与元表机制 (OOP & 只读属性)</summary>
+
+<p><strong>面试提问</strong>：Lua 是如何实现面向对象的？如果要给 Lua 里的变量设置只读属性，你会怎么做？</p>
+<p><strong>核心考点</strong>：Lua <code>Metatable</code>（元表）的深度运用。</p>
+<p><strong>踩分关键词</strong>：Table 模拟类、<code>__index</code> 查找机制、<code>__newindex</code> 拦截赋值。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：Lua 利用 <code>table</code> 加上 <code>metatable</code>（元表）的机制来模拟面向对象。</p>
+<ol>
+<li><p><strong>面向对象实现</strong>：访问 <code>table</code> 中不存在的字段时，触发 <code>__index</code> 元方法。将子对象的元表的 <code>__index</code> 指向父对象，即可实现继承。</p>
+</li>
+<li><p><strong>设置只读属性</strong>：创建一个空的代理 Table 和一个隐藏的实际数据 Table。为代理 Table 设置元表：</p>
 <ul>
-<li>优点：可复用，适合批量创建类似对象  </li>
-<li>缺点：方法会被每个实例复制一份，占内存</li>
+<li>重写 <code>__index</code>：返回隐藏数据 Table 中的值。</li>
+<li>重写 <code>__newindex</code>：直接抛出错误，拦截赋值操作。</li>
 </ul>
+</li>
+</ol>
+<p>实战：在项目中，利用 <code>__newindex</code> 拦截机制将核心全局配置表（如武器基础伤害表）包装成只读态，提高代码架构的安全性。</p>
 </details>
 
 <details>
-<summary>4. 使用 Object.create()</summary>
+<summary>题目 9：Lua 存储结构与 GC 机制</summary>
 
-<p>从指定原型对象创建一个新对象：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> proto = &#123; </span><br><span class="line">  <span class="title function_">greet</span>(<span class="params"></span>) &#123; <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hi&quot;</span>); &#125; </span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> object = <span class="title class_">Object</span>.<span class="title function_">create</span>(proto);</span><br><span class="line">object.<span class="property">name</span> = <span class="string">&quot;Sudheer&quot;</span>;</span><br></pre></td></tr></table></figure>
-
+<p><strong>面试提问</strong>：Lua 的 table 存储结构是什么样的？Lua 的 GC（垃圾回收）机制是什么？</p>
+<p><strong>核心考点</strong>：Lua Table 的底层 C 源码实现结构，以及增量式垃圾回收算法。</p>
+<p><strong>踩分关键词</strong>：数组部分 + 哈希部分、三色标记清除算法。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：Lua 的 Table 底层包含数组部分和哈希表部分。GC 采用增量式的三色标记清除算法。</p>
+<ol>
+<li><p><strong>Table 结构</strong>：连续数字作为 key 会被引擎存入”连续数组部分”提升速度。非连续数字或字符串 key 存入”哈希表部分”。</p>
+</li>
+<li><p><strong>GC 机制</strong>：</p>
 <ul>
-<li>优点：可直接指定原型，更灵活的继承控制</li>
+<li>白色：未被访问到的对象（会被清除）。</li>
+<li>灰色：已被访问到，但它引用的对象还没扫描完。</li>
+<li>黑色：已被访问，且引用的对象也已扫描完（存活）。</li>
 </ul>
+</li>
+</ol>
+<p>实战：开发中尽量保证数组元素的连续性，避免中间插入 <code>nil</code> 产生空洞（Hole），防止数据从数组部分退化到哈希部分导致性能损耗。</p>
 </details>
 
 <details>
-<summary>5. 使用类（class）语法</summary>
+<summary>题目 10：UE 网络底层与 RPC 序列化 (UDP/TCP & 数据处理)</summary>
 
-<p>使用 ES6 的 <code>class</code> 创建对象：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">name, age</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">age</span> = age;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Sudheer&quot;</span>, <span class="number">34</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>面试提问</strong>：UE 的网络同步底层原理是什么？UE 的 RPC 怎么去使用 TCP 和 UDP？发送 RPC 序列化怎么处理的？</p>
+<p><strong>核心考点</strong>：UE 网络的底层协议栈，数据的序列化压缩。</p>
+<p><strong>踩分关键词</strong>：基于 UDP、自建可靠层、滑动窗口、<code>FArchive</code>、位流序列化。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：UE 的网络底层完全基于 UDP。为了保证可靠性，UE 在 UDP 之上自建了一套”可靠性层”。</p>
+<ol>
+<li><p><strong>UDP&#x2F;TCP 模拟</strong>：<code>Unreliable</code> RPC 是纯 UDP；<code>Reliable</code> RPC 时，引擎内部分配序列号，若未收到 Ack 则重传，即”基于 UDP 模拟 TCP”。</p>
+</li>
+<li><p><strong>RPC 序列化</strong>：底层通过 <code>FArchive</code> 系统进行位级别（Bit-level）的序列化读写（<code>NetBitWriter</code> &#x2F; <code>NetBitReader</code>）。</p>
+</li>
+</ol>
+<p>实战：同步结构体数据时，重写结构体的 <code>NetSerialize</code> 函数。例如将 32 位浮点数量化压缩成 8 位整数进行传输，可大幅度节省带宽。</p>
+</details>
 
+<details>
+<summary>题目 11：高级架构：UI 框架设计</summary>
+
+<p><strong>面试提问</strong>：如果让你设计 UI 框架，你会怎么实现？</p>
+<p><strong>核心考点</strong>：业务解耦能力、内存管理、生命周期控制。</p>
+<p><strong>踩分关键词</strong>：MVC&#x2F;MVVM 架构、UIManager、UI 栈控制、资源对象池。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：采用 MVC&#x2F;MVVM 架构结合 UIManager（UI管理器），实现”表现与逻辑严格分离”。</p>
+<ol>
+<li><strong>分层设计</strong>：C++ 编写 Widget Controller 监听底层数据；蓝图作为 View 接收广播播放动画。</li>
+<li><strong>UIManager 控制中心</strong>：挂载在 <code>GameInstance</code> 上，维护 UI 栈。打开新页面暂停底层输入，关闭时出栈恢复。</li>
+<li><strong>资源管理</strong>：常用的 UI（如血条、伤害数字）使用对象池隐藏复用，避免频繁实例化和 GC。</li>
+</ol>
+<p>实战：UI 层绝不直接读取底层属性集。Controller 绑定属性更新委托，数据变化后进行格式化处理，再抛给蓝图显示，实现彻底解耦。</p>
+</details>
+
+<details>
+<summary>题目 12：高级网络同步 (预测与延迟补偿)</summary>
+
+<p><strong>面试提问</strong>：项目中的客户端预测和延迟补偿实现思路？服务器倒带是如何判断击中时间的？</p>
+<p><strong>核心考点</strong>：FPS&#x2F;动作游戏核心网络架构，解决延迟带来的玩家体验撕裂。</p>
+<p><strong>踩分关键词</strong>：本地预表现、服务器校验与拉回、快照（Snapshot）、时间戳。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：客户端预测掩盖本地操作延迟，延迟补偿（服务器倒带）保证”所见即所得”的射击体验。</p>
+<ol>
+<li><p><strong>客户端预测</strong>：本地输入直接走（预表现），并记录带时间戳的移动请求。若服务器算出的位置差距过大，客户端会被强制”拉回”。</p>
+</li>
+<li><p><strong>服务器倒带</strong>：客户端开火带上画面时间戳发给服务器。服务器维护一份玩家过去历史位置的”快照”。服务器收到请求后，将受击者的碰撞体”倒带”回对应时刻，进行命中检测。</p>
+</li>
+</ol>
+<p>实战：延迟补偿有较大 CPU 开销。为防止”高延迟玩家太占优”产生穿墙击杀，服务器通常设置倒带时间上限（如最大 200ms），超过阈值的包直接判为无效。</p>
+</details>
+
+<details>
+<summary>题目 13：UE底层基石 (UObject 与 UPROPERTY)</summary>
+
+<p><strong>面试提问</strong>：UObject有了解吗？UPROPERTY是怎么实现的？</p>
+<p><strong>核心考点</strong>：虚幻引擎反射系统和垃圾回收（GC）的根基。</p>
+<p><strong>踩分关键词</strong>：UHT、宏标记、<code>.generated.h</code>、垃圾回收（GC）。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：<code>UObject</code> 是所有托管对象的基类，提供 GC、反射、序列化功能。<code>UPROPERTY</code> 是反射和 GC 追踪的入口。</p>
+<p>实现原理：<code>UPROPERTY()</code> 在 C++ 层是空宏，供 UHT (Unreal Header Tool) 扫描。编译前，UHT 自动生成包含反射数据的 <code>.generated.h</code> 文件，使引擎在运行时获知内存布局，从而实现蓝图可见和 GC 追踪。</p>
+<p>实战：核心数据继承自 <code>UObject</code> 并通过 <code>UPROPERTY</code> 暴露给蓝图读取。遇到反射绑定报错时，可通过追踪 UHT 生成的 <code>*.gen.cpp</code> 文件进行深入排查。</p>
+</details>
+
+<details>
+<summary>题目 14：AI与3D数学 (NavMesh与点在三角形内)</summary>
+
+<p><strong>面试提问</strong>：了解 NavMesh 底层寻路和 A* 算法吗？判断点在三角形内外怎么做？</p>
+<p><strong>核心考点</strong>：游戏 AI 寻路基础和基础 3D 几何算法。</p>
+<p><strong>踩分关键词</strong>：多边形网格、启发式函数、叉乘。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：NavMesh 将可行走区域划分为凸多边形；A* 是底层寻路核心。判断点在三角形内最常用叉乘法。</p>
+<ol>
+<li><p><strong>NavMesh &amp; A*</strong>：A* 算法维护优先级队列，结合代价函数 F &#x3D; G + H 在多边形节点间寻找最优路径。</p>
+</li>
+<li><p><strong>点在三角形内</strong>：三角形顶点 A, B, C，测点 P。按照逆时针计算叉乘，若 <code>AB × AP</code>，<code>BC × BP</code>，<code>CA × CP</code> 的 Z 轴方向符号全部相同，则 P 在内部。</p>
+</li>
+</ol>
+<p>实战：处理 AI 巡逻、追击时，结合行为树利用引擎原生的 <code>MoveTo</code> 节点调用底层的寻路模块。</p>
+</details>
+
+<details>
+<summary>题目 15：C++ 内存与数据结构 (智能指针与 map)</summary>
+
+<p><strong>面试提问</strong>：普通指针占几个字节？为什么不能大量使用智能指针？unordered_map 和 map 的区别？</p>
+<p><strong>核心考点</strong>：内存管理意识、STL 底层数据结构与时间复杂度。</p>
+<p><strong>踩分关键词</strong>：控制块开销、原子操作、红黑树、哈希表。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：指针大小取决于架构（32位4字节，64位8字节）。<code>map</code> 基于红黑树，<code>unordered_map</code> 基于哈希表。</p>
+<ol>
+<li><p><strong>智能指针开销</strong>：<code>shared_ptr</code> 包含对象指针外，还分配控制块存储引用计数。引用计数增减是原子操作，高频调用下有不可忽视的性能开销。</p>
+</li>
+<li><p><strong>map vs unordered_map</strong>：</p>
 <ul>
-<li>优点：语法清晰，结构化强  </li>
-<li>缺点：语法糖，本质仍基于原型继承</li>
+<li>map：红黑树，元素有序，时间复杂度 O(log N)。</li>
+<li>unordered_map：哈希表，元素无序，平均时间复杂度 O(1)，但扩容和哈希冲突有较大开销。</li>
 </ul>
+</li>
+</ol>
+<p>实战：除非跨线程生命周期管理，局部临时指针优先直接使用裸指针。</p>
 </details>
 
+<details>
+<summary>题目 16：UE 委托与 UI 架构 (Delegate 与 UMG/Slate)</summary>
+
+<p><strong>面试提问</strong>：什么时候用代理（Delegate），有哪些？UMG 和 Slate 区别，为什么需要 Slate？</p>
+<p><strong>核心考点</strong>：观察者模式的应用、UE 界面渲染底层。</p>
+<p><strong>踩分关键词</strong>：解耦、单播&#x2F;多播&#x2F;动态、C++ 底层 UI 框架。</p>
+<p><strong>高分背诵模板</strong>：</p>
+<p>核心结论：代理用于系统间解耦。Slate 是底层的 C++ UI 框架，UMG 是对 Slate 的蓝图可视化封装。</p>
+<ol>
+<li><p><strong>代理类型</strong>：</p>
+<ul>
+<li>单播：绑定一个函数，有返回值。</li>
+<li>多播：绑定多个函数，无返回值。</li>
+<li>动态：可序列化，能在蓝图中调用和绑定，执行稍慢。</li>
+</ul>
+</li>
+<li><p><strong>UMG vs Slate</strong>：Slate 纯 C++ 编写性能极高，但不直观。UMG 提供可视化编辑器，让非程序人员拼装 UI。</p>
+</li>
+</ol>
+<p>实战：在 UI 架构中，C++ 写 Widget Controller 监听底层事件，大量使用 Dynamic Multicast Delegate。底层逻辑触发多播，蓝图 UI 绑定多播更新，实现经典的 MVC 数据流。</p>
 </details>
 
-
-<p>数据库基础</p>
-<details>
-<summary>sql支持以下三种注释</summary>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">from</span> mytable;<span class="comment">--注释</span></span><br><span class="line"><span class="comment">/*注释1</span></span><br><span class="line"><span class="comment">   注释2*/</span></span><br></pre></td></tr></table></figure>
-
-</details>
-
-<p>html,css</p>
-<details>
-<summary>DOCTYPE 的作用是什么？</summary>
-- <!DOCTYPE>声明位于HTML文档中的第一行，处于< html>标签之前。告知浏览器的解析器用什么文档标准解析这个文档
-</details>
-<details>
-<summary>标准模式与兼容模式各有什么区别？</summary>
-- 标准模式的渲染方式和JS引擎的解析方式都是以该浏览器支持的最高标准运行。兼容模式中，页面以宽松的向后兼容的方式显示，模拟老式浏览器的行为防止站点无法工作
-</details>
-<details>
-<summary>讲一下盒模型，普通盒模型和怪异盒模型有什么区别？</summary>
-- 盒模型content,内边距padding，边框border,外边距margin。<br>
-- box-sizing: content-box（普通盒模型）：width/height只包含内容宽高，padding/border叠加在外面。<br>
-- box-sizing：border-box（怪异盒模型）：width/height包含content+padding<br>
-</details>
-<details>
-<summary>块元素和行内元素区别是什么？常见块元素和行内元素有哪些？</summary>
--块级元素独占一行可设置宽高；行内元素不独占行、不可设置宽高（可用inline-bock或flex改变行为 
-</details>
-<details>
-<summary>HTML语义化标签 有哪些？</summary>
--header,nav,main,article,section,aside,footer,figure,figcaption,time,adress等
-</details>
-<details>
-<summary>伪类和伪元素的区别是什么？</summary>
--伪类（：hover）表示状态/位置；伪元素（::before）创建虚拟子元素插入内容
-</details>
-<details>
-<summary>CSS如何实现垂直居中？</summary>
--最通常的方式是Flex：display:flex;align-items:center;justify-content:center;
-</details>
-<details>
-<summary>CSS常见的选择器有哪些？</summary>
--元素、类、id、后代、子选择器、相邻兄弟、通用兄弟、属性选择器、伪类、伪元素。
-</details>
-<details>
-<summary>CSS的优先级如何计算？</summary>
--优先级：内联>id>class/attribute/pseudo-class>element/pseudo-element;!important可打断常规规则
-</details>
-<details>
-<summary>长度单位px、em和rem的区别是什么？</summary>
--px绝对，em相对当前字体（会累积），rem相对根（html）字体
-</details>
-<details>
-<summary>讲一下flex弹性盒布局？</summary>
--父容器display:flex定义主轴与交叉轴，常用属性：justify-content，align-items，flex-wrap；子项flex控制伸缩
-</details>
-<details>
-<summary>浮动塌陷问题解决方法是什么？</summary>
--父元素包含浮动子元素导致高度塌陷；解决：clearfix（::after）、overflow：auto或display：flow-root
-</details>
-<details>
-<summary>position属性的值有哪些？各个值是什么含义？</summary>
--static，relative，absolute，fixed，sticky。分别说明是否脱离文档流与参考物
-</details>
-<details>
-<summary>BFC、IFC是什么？</summary>
--BFC(Block Formatting Context)是独立布局环境（防止margin折叠、包含浮动），触发方式包括overflow非visible、float、display:flow-root等
-</details>
-
-<p>javascript</p>
-<details>
-<summary>谈谈对原型链的理解。</summary>
-- 对象通过内部[[prototype]]链接到另一个对象；属性查找沿原型链向上直到null。
-</details>
-<details>
-<summary>js如何实现继承？</summary>
--常见方式：原型链继承、构造函数继承、组合继承、寄生组合继承（优化）、ES6class
-</details>
-<details>
-<summary>js有哪些判断类型的方法？</summary>
--基本类型Undefined，Null，Boolean，Number，String，Symbol，BigInt
-</details>
-<details>
-<summary>如何判断一个变量是否数组？</summary>
--推荐Array.isArray
-(arr);备选Object.prototype.toString.call(arr) === '[object Array]'。
-</details>
-<details>
-<summary>Null 和 undefined 的区别？</summary>
--
-</details>
     </div>
     
     
@@ -331,7 +465,7 @@
     <div id="footer-wrap">
         <div>
             &copy;
-            2024 - 2025 start.luck
+            2024 - 2026 start.luck
             <span id="footer-icon">
                 <i class="fa-solid fa-font-awesome fa-fw"></i>
             </span>

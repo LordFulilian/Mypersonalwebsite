@@ -1,8 +1,8 @@
-# ParticleX Configuration
+﻿# ParticleX Configuration
 # https://github.com/theme-particlex/hexo-theme-particlex
 
 # Avatar image
-avatar: /images/1.jpg
+avatar: /images/avatar.jpg
 
 
 
@@ -43,7 +43,7 @@ menu:
 card:
     enable: true
     description: |
-        一个一直学习的少年
+        Game Dev & AI Explorer · UE / C++ / Python / Lua
     iconLinks:
         GitHub:
             link: https://github.com/errorlook

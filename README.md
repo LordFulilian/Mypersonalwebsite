@@ -1,10 +1,10 @@
 ﻿<p align="center">
-  <img src="docs/images/1.jpg" width="120" height="120" style="border-radius: 50%" alt="avatar">
+  <img src="docs/images/avatar.jpg" width="120" height="120" style="border-radius: 50%" alt="avatar">
 </p>
 
 <h1 align="center">start.luck</h1>
 <p align="center">
-  基于 <a href="https://hexo.io/">Hexo</a> + <a href="https://github.com/theme-particlex/hexo-theme-particlex">Particlex</a> 构建的个人博客
+  DL.TS 的个人技术博客 — 基于 <a href="https://hexo.io/">Hexo</a> + <a href="https://github.com/theme-particlex/hexo-theme-particlex">Particlex</a> 构建
 </p>
 
 <p align="center">
@@ -14,14 +14,26 @@
   <a href="https://github.com/errorlook/boke/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow" alt="License"></a>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff" alt="Python">
+  <img src="https://img.shields.io/badge/SQL-4479A1?logo=mysql&logoColor=fff" alt="SQL">
+  <img src="https://img.shields.io/badge/C++-00599C?logo=cplusplus&logoColor=fff" alt="C++">
+  <img src="https://img.shields.io/badge/UE-0E1128?logo=unrealengine&logoColor=fff" alt="UE">
+  <img src="https://img.shields.io/badge/Lua-2C2D72?logo=lua&logoColor=fff" alt="Lua">
+  <img src="https://img.shields.io/badge/OpenAI-412991?logo=openai&logoColor=fff" alt="OpenAI">
+  <img src="https://img.shields.io/badge/Gemini-8E75B2?logo=googlegemini&logoColor=fff" alt="Gemini">
+  <img src="https://img.shields.io/badge/Deepseek-4D6BFE?logo=deepseek&logoColor=fff" alt="Deepseek">
+  <img src="https://img.shields.io/badge/Git-F05032?logo=git&logoColor=fff" alt="Git">
+</p>
+
 ---
 
 ## 项目简介
 
-个人博客，用于记录技术学习、生活感悟、动画壁纸收藏和旅行见闻。
+个人博客，用于记录游戏开发学习、AI 探索、动画壁纸收藏和旅行见闻。
 
+- **作者**: DL.TS
 - **站点地址**: [https://errorlook.github.io/boke/](https://errorlook.github.io/boke/)
-- **作者**: zhangqi
 - **框架**: Hexo 7.3.0
 - **主题**: Particlex
 - **评论**: Twikoo
@@ -34,7 +46,7 @@ boke/
 ├── source/                  # Markdown 源文件
 │   ├── _posts/              # 博客文章
 │   ├── about/               # 关于页面
-│   ├── Knowledge Base/      # 知识库（JavaScript 基础笔记）
+│   ├── Knowledge Base/      # 知识库（UE 客户端开发面试题库）
 │   └── wallpaper/           # 壁纸收藏页
 ├── themes/particlex/        # Particlex 主题
 ├── scaffolds/               # 文章脚手架模板
@@ -140,3 +152,9 @@ pinned: 10         # 可选：置顶权重（越大越靠前）
 ## 开源协议
 
 MIT License
+
+## 联系方式
+
+- **GitHub**: [github.com/errorlook](https://github.com/errorlook)
+- **邮箱**: start.luck@qq.com
+- **博客**: [errorlook.github.io/boke](https://errorlook.github.io/boke)

@@ -1,14 +1,14 @@
-# Hexo Configuration
+﻿# Hexo Configuration
 # Docs: https://hexo.io/docs/configuration.html
 # Source: https://github.com/hexojs/hexo/
 
 # Site
 title: start.luck
 subtitle: ''
-description: ''
+description: 'DL.TS 的个人技术博客'
 keywords:
-author: zhangqi
-language: English
+author: DL.TS
+language: zh-CN
 timezone: ''
 
 
@@ -83,4 +83,3 @@ ignore:
 
 # Theme
 theme: particlex
-

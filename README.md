@@ -33,7 +33,7 @@
 个人博客，用于记录游戏开发学习、AI 探索、动画壁纸收藏和旅行见闻。
 
 - **作者**: DL.TS
-- **站点地址**: [https://errorlook.github.io/boke/](https://errorlook.github.io/boke/](https://lordfulilian.github.io/Mypersonalwebsite)
+- **站点地址**:(https://lordfulilian.github.io/Mypersonalwebsite)
 - **框架**: Hexo 7.3.0
 - **主题**: Particlex
 - **评论**: Twikoo

@@ -12,25 +12,25 @@
   <ul style="list-style:none; padding-left:0;">
     <li>
       <!-- data-prefix 是图片路径前缀，data-count 是数量 -->
-      <span class="nav-item" data-prefix="/boke/images/younuo" data-count="2" style="cursor:pointer; color:#6A5ACD;">尤诺</span>
+      <span class="nav-item" data-prefix="/Mypersonalwebsite/images/younuo" data-count="2" style="cursor:pointer; color:#6A5ACD;">尤诺</span>
     </li>
     <li>
-   <span class="nav-item" data-prefix="/boke/images/fulilian" data-count="56" style="cursor:pointer; color:#6A5ACD;">葬送的芙莉莲</span>
+   <span class="nav-item" data-prefix="/Mypersonalwebsite/images/fulilian" data-count="56" style="cursor:pointer; color:#6A5ACD;">葬送的芙莉莲</span>
     </li>
     <li>
-      <span class="nav-item" data-prefix="/boke/images/qingyin" data-count="1" style="cursor:pointer; color:#6A5ACD;">轻音少女</span>
+      <span class="nav-item" data-prefix="/Mypersonalwebsite/images/qingyin" data-count="1" style="cursor:pointer; color:#6A5ACD;">轻音少女</span>
     </li>
     <li>
-      <span class="nav-item" data-prefix="/boke/images/lvyou" data-count="4" style="cursor:pointer; color:#6A5ACD;">旅游</span>
+      <span class="nav-item" data-prefix="/Mypersonalwebsite/images/lvyou" data-count="4" style="cursor:pointer; color:#6A5ACD;">旅游</span>
     </li>
     <li>
-      <span class="nav-item" data-prefix="/boke/images/feibi" data-count="2" style="cursor:pointer; color:#6A5ACD;">菲比</span>
+      <span class="nav-item" data-prefix="/Mypersonalwebsite/images/feibi" data-count="2" style="cursor:pointer; color:#6A5ACD;">菲比</span>
     </li>
      <li>
-      <span class="nav-item" data-prefix="/boke/images/kuaishan" data-count="14" style="cursor:pointer; color:#6A5ACD;">芙莉莲快闪店</span>
+      <span class="nav-item" data-prefix="/Mypersonalwebsite/images/kuaishan" data-count="14" style="cursor:pointer; color:#6A5ACD;">芙莉莲快闪店</span>
     </li>
      <li>
-      <span class="nav-item" data-prefix="/boke/images/tianshi" data-count="15" style="cursor:pointer; color:#6A5ACD;">天使降临在我身边</span>
+      <span class="nav-item" data-prefix="/Mypersonalwebsite/images/tianshi" data-count="15" style="cursor:pointer; color:#6A5ACD;">天使降临在我身边</span>
     </li>
   </ul>
 </details>

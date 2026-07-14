@@ -10,8 +10,8 @@
 <p align="center">
   <a href="https://hexo.io/"><img src="https://img.shields.io/badge/Hexo-7.3.0-0E83CD?logo=hexo" alt="Hexo"></a>
   <a href="https://github.com/theme-particlex/hexo-theme-particlex"><img src="https://img.shields.io/badge/Theme-Particlex-blueviolet" alt="Theme"></a>
-  <a href="https://errorlook.github.io/boke/"><img src="https://img.shields.io/badge/Live-blog-success?logo=github" alt="Live"></a>
-  <a href="https://github.com/errorlook/boke/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow" alt="License"></a>
+  <a href="https://lordfulilian.github.io/Mypersonalwebsite/"><img src="https://img.shields.io/badge/Live-blog-success?logo=github" alt="Live"></a>
+  <a href="https://github.com/LordFulilian/Mypersonalwebsite/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow" alt="License"></a>
 </p>
 
 <p align="center">
@@ -33,7 +33,7 @@
 个人博客，用于记录游戏开发学习、AI 探索、动画壁纸收藏和旅行见闻。
 
 - **作者**: DL.TS
-- **站点地址**:(https://lordfulilian.github.io/Mypersonalwebsite)
+- **站点地址**: [https://lordfulilian.github.io/Mypersonalwebsite/](https://lordfulilian.github.io/Mypersonalwebsite/)
 - **框架**: Hexo 7.3.0
 - **主题**: Particlex
 - **评论**: Twikoo
@@ -83,13 +83,13 @@ boke/
 
 ```bash
 # 克隆项目
-git clone https://github.com/errorlook/boke.git
-cd boke
+git clone https://github.com/LordFulilian/Mypersonalwebsite.git
+cd Mypersonalwebsite
 
 # 安装依赖
 npm install
 
-# 启动本地开发服务器（默认 http://localhost:4000/boke/）
+# 启动本地开发服务器（默认 http://localhost:4000/Mypersonalwebsite/）
 npm run server
 ```
 
@@ -155,6 +155,6 @@ MIT License
 
 ## 联系方式
 
-- **GitHub**: [github.com/errorlook](https://github.com/errorlook)
+- **GitHub**: [github.com/LordFulilian](https://github.com/LordFulilian)
 - **邮箱**: start.luck@qq.com
-- **博客**: [errorlook.github.io/boke](https://errorlook.github.io/boke)
+- **博客**: [lordfulilian.github.io/Mypersonalwebsite](https://lordfulilian.github.io/Mypersonalwebsite/)

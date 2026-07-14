@@ -34,6 +34,6 @@ title: about
 
 ## 联系方式
 
-- **GitHub**: [github.com/errorlook](https://github.com/errorlook)
+- **GitHub**: [github.com/LordFulilian](https://github.com/LordFulilian)
 - **邮箱**: start.luck@qq.com
-- **博客**: [errorlook.github.io/boke](https://errorlook.github.io/boke)
+- **博客**: [lordfulilian.github.io/Mypersonalwebsite](https://lordfulilian.github.io/Mypersonalwebsite/)

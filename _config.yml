@@ -14,8 +14,8 @@ timezone: ''
 
 
 # URL
-url: https://errorlook.github.io
-root: /boke/
+url: https://lordfulilian.github.io/Mypersonalwebsite
+root: /Mypersonalwebsite/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
